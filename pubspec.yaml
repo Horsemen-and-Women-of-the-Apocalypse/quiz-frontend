@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   pedantic: ^1.11.0
+  flutter_config: ^2.0.0
   flutter:
     sdk: flutter
 
