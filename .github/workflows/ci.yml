@@ -1,0 +1,95 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+      - "feature/*"
+  pull_request:
+    branches:
+      - "feature/*"
+
+jobs:
+  # Lint checker UI job
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.0.6'
+          channel: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Run analyzer
+        run: flutter analyze --no-pub
+      - name: Run lint
+        run: flutter format -n --set-exit-if-changed lib test
+
+  # Build UI android job
+  build-android:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.0.6'
+          channel: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Run build
+        run: |
+          flutter build apk --debug --split-per-abi
+          flutter build appbundle
+
+  # Build UI ios job
+  build-ios:
+    needs: lint
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.0.6'
+          channel: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Run build
+        run: |
+          flutter build apk
+          flutter build ios --release --no-codesign
+
+  # Build UI web job
+  build-web:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.0.6'
+          channel: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Run build
+        run: flutter build web
+
+  # Test unit job
+  test-unit:
+    needs: [
+      build-android,
+      build-ios,
+      build-web]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.0.6'
+          channel: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Run tests
+        run: flutter test --no-pub
