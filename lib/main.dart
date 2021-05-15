@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_config/flutter_config.dart';
+import 'package:global_configuration/global_configuration.dart';
 
 void main() async {
+  // Load configuration
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterConfig.loadEnvVariables();
+  await GlobalConfiguration().loadFromAsset('app_settings');
+
   runApp(MyApp());
 }
 
