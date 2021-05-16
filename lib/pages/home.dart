@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz/pages/solo/quiz_selection.dart';
 import 'package:quiz/utils/page_texts.dart';
 
 /// Home page widget
@@ -26,7 +27,10 @@ class HomePage extends StatelessWidget {
                 )),
             buttonPaddingGenerator(ElevatedButton(
                 key: Key(HomepageTexts.SOLO_BUTTON_TEXT),
-                onPressed: null, // TODO: Switch to solo mode page
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => QuizSelectionPage())),
                 style: buttonStyle,
                 child: Text(HomepageTexts.SOLO_BUTTON_TEXT))),
             buttonPaddingGenerator(ElevatedButton(
