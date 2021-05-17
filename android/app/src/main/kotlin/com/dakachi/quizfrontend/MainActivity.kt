@@ -1,4 +1,4 @@
-package com.dakachi.quizfrontend
+package com.hwa.quizfrontend
 
 import io.flutter.embedding.android.FlutterActivity
 

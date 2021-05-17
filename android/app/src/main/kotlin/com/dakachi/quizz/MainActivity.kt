@@ -1,4 +1,4 @@
-package com.dakachi.quizz
+package com.hwa.quiz
 
 import io.flutter.embedding.android.FlutterActivity
 
