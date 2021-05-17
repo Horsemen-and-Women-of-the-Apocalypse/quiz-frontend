@@ -21,8 +21,6 @@ IDE - Android Studio (pref) or Visual Studio Code => https://flutter.dev/docs/ge
 
 If chrome is not install, use this command to run on server :
 
-``flutter run -d web-server``
+`flutter run -d web-server`
 
-Create ``.env`` file from ``.env.template``
-
-Modify ``API_URL`` depending of your server url
+Create `app_settings.json` file in `assets/cfg` folder based on `app_settings.template.json`
