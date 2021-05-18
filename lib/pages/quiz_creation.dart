@@ -48,6 +48,15 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                           });
                         },
                       ),
+                      trailing: IconButton(
+                        key: Key(QuizPageTexts.ADD_ANSWER),
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          setState(() {
+                            _questions.add(Question());
+                          });
+                        },
+                      ),
                       subtitle: Padding(
                           padding: EdgeInsets.only(top: 15),
                           child: Column(
@@ -96,8 +105,9 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                               ),
                               Row(
                                 children: [
-                                  Text('Add answers '),
+                                  Text(QuizPageTexts.ADD_ANSWER),
                                   IconButton(
+                                    key: Key(QuizPageTexts.ADD_ANSWER),
                                     icon: Icon(Icons.add),
                                     onPressed: () {
                                       setState(() {
@@ -115,13 +125,13 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
             Padding(
               padding: EdgeInsets.all(15),
               child: ElevatedButton(
-                  key: Key(QuizPageTexts.ADD_ANSWER),
+                  key: Key(QuizPageTexts.SUBMIT),
                   onPressed: () {
                     setState(() {
-                      _questions.add(Question());
+                      //TODO SUBMIT
                     });
                   },
-                  child: Text(QuizPageTexts.ADD_ANSWER)),
+                  child: Text(QuizPageTexts.SUBMIT)),
             ),
           ],
         ),
