@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/model/api/quiz.dart';
+import 'package:quiz/pages/home.dart';
 
 /// Quiz results page in solo mode
 class SoloQuizResultsPage extends StatelessWidget {
@@ -35,6 +36,18 @@ class SoloQuizResultsPage extends StatelessWidget {
               _results.fails
                   .map((e) => generateCorrection(context, e))
                   .toList(),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 25),
+          child: ElevatedButton(
+              onPressed: () {
+                // Go to home and clear pages stack
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                    (r) => false);
+              },
+              child: Text('HOME')),
         )
       ]),
     );
