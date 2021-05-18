@@ -64,16 +64,16 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: (_questions[index].answers.length * 60)
+                                height: (_questions[index].answers!.length * 60)
                                     .toDouble(),
                                 width: MediaQuery.of(context).size.width / 4,
                                 child: ListView.builder(
-                                    itemCount: _questions[index].answers.length,
+                                    itemCount: _questions[index].answers!.length,
                                     itemBuilder: (BuildContext context, int i) {
                                       return ListTile(
                                         title: TextFormField(
                                           controller: _questions[index]
-                                              .answers[i]
+                                              .answers![i]
                                               .answerController,
                                           style: TextStyle(color:(_questions[index].answer == i) ? Colors.green : Colors.red,),
                                           decoration: InputDecoration(
@@ -85,7 +85,7 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                                           onPressed: () {
                                             setState(() {
                                               _questions[index]
-                                                  .answers
+                                                  .answers!
                                                   .removeAt(i);
                                             });
                                           },
@@ -93,10 +93,10 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                                         trailing: Radio(
                                           value: i,
                                           groupValue: _questions[index].answer,
-                                          onChanged: (int newValue) => {
+                                          onChanged: (int? newValue) => {
                                             setState(() {
                                               _questions[index].answer =
-                                                  newValue;
+                                              (newValue)!.toInt();
                                             })
                                           },
                                         ),
@@ -111,7 +111,7 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                                     icon: Icon(Icons.add),
                                     onPressed: () {
                                       setState(() {
-                                        _questions[index].answers.add(Answer());
+                                        _questions[index].answers!.add(Answer());
                                       });
                                     },
                                   )
@@ -144,7 +144,7 @@ class Question {
   final questionController = TextEditingController();
   int answer = 0;
 
-  List<Answer> answers;
+  List<Answer>? answers;
 
   Question() {
     answers = initAnswer();
