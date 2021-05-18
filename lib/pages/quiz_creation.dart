@@ -54,10 +54,10 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
               child: ListView.builder(
                   itemCount: quiz.questions!.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Padding (
+                    return Padding(
                       padding: EdgeInsets.all(padding),
-                      child: Container (
-                        decoration: BoxDecoration (
+                      child: Container(
+                        decoration: BoxDecoration(
                           border: Border.all(
                             color: Colors.black,
                             width: 2,
@@ -66,7 +66,8 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                         ),
                         child: ListTile(
                           title: TextFormField(
-                            controller: quiz.questions![index].questionController,
+                            controller:
+                                quiz.questions![index].questionController,
                             onChanged: (value) {
                               setState(() {
                                 quiz.questions![index].questionName = value;
@@ -81,14 +82,16 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                             decoration: InputDecoration(
                                 hintText: QuizPageTexts.INPUT_QUESTION),
                           ),
-                          leading: (quiz.questions!.length > 1) ? IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {
-                              setState(() {
-                                quiz.questions!.removeAt(index);
-                              });
-                            },
-                          ) : null,
+                          leading: (quiz.questions!.length > 1)
+                              ? IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () {
+                                    setState(() {
+                                      quiz.questions!.removeAt(index);
+                                    });
+                                  },
+                                )
+                              : null,
                           trailing: IconButton(
                             key: Key(QuizPageTexts.ADD_ANSWER),
                             icon: Icon(Icons.add),
@@ -105,28 +108,33 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                    height:
-                                        (quiz.questions![index].answers!.length *
-                                                80)
-                                            .toDouble(),
-                                    width: MediaQuery.of(context).size.width / 1.5,
+                                    height: (quiz.questions![index].answers!
+                                                .length *
+                                            80)
+                                        .toDouble(),
+                                    width:
+                                        MediaQuery.of(context).size.width / 1.5,
                                     child: ListView.builder(
-                                        itemCount:
-                                            quiz.questions![index].answers!.length,
-                                        itemBuilder: (BuildContext context, int i) {
+                                        itemCount: quiz
+                                            .questions![index].answers!.length,
+                                        itemBuilder:
+                                            (BuildContext context, int i) {
                                           return ListTile(
                                             title: TextFormField(
                                               controller: quiz.questions![index]
                                                   .answers![i].answerController,
                                               onChanged: (value) {
                                                 setState(() {
-                                                  quiz.questions![index].answers![i]
+                                                  quiz
+                                                      .questions![index]
+                                                      .answers![i]
                                                       .answerName = value;
                                                 });
                                               },
                                               validator: (value) {
                                                 if (value!.isEmpty) {
-                                                  return QuizPageTexts.ERROR_EMPTY;
+                                                  return QuizPageTexts
+                                                      .ERROR_EMPTY;
                                                 }
                                                 return null;
                                               },
@@ -138,26 +146,39 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                                                     : Colors.red,
                                               ),
                                               decoration: InputDecoration(
-                                                  hintText:
-                                                      QuizPageTexts.INPUT_ANSWER),
+                                                  hintText: QuizPageTexts
+                                                      .INPUT_ANSWER),
                                             ),
-                                            leading: (quiz.questions![index].answers!.length > 3) ? IconButton(
-                                              icon: Icon(Icons.delete),
-                                              onPressed: () {
-                                                setState(() {
-                                                  if(quiz.questions![index].answer >= i) quiz.questions![index].answer = 0;
-                                                  quiz.questions![index].answers!
-                                                      .removeAt(i);
-                                                });
-                                              },
-                                            ): null,
+                                            leading: (quiz.questions![index]
+                                                        .answers!.length >
+                                                    3)
+                                                ? IconButton(
+                                                    icon: Icon(Icons.delete),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        if (quiz
+                                                                .questions![
+                                                                    index]
+                                                                .answer >=
+                                                            i) {
+                                                          quiz.questions![index]
+                                                              .answer = 0;
+                                                        }
+                                                        quiz.questions![index]
+                                                            .answers!
+                                                            .removeAt(i);
+                                                      });
+                                                    },
+                                                  )
+                                                : null,
                                             trailing: Radio(
                                               value: i,
                                               groupValue:
                                                   quiz.questions![index].answer,
                                               onChanged: (int? newValue) => {
                                                 setState(() {
-                                                  quiz.questions![index].answer =
+                                                  quiz.questions![index]
+                                                          .answer =
                                                       (newValue)!.toInt();
                                                 })
                                               },
@@ -165,7 +186,7 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                                           );
                                         }),
                                   ),
-                                  Row (
+                                  Row(
                                     children: [
                                       Text(QuizPageTexts.ADD_ANSWER),
                                       IconButton(
@@ -192,14 +213,14 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
               child: ElevatedButton(
                   key: Key(QuizPageTexts.SUBMIT),
                   onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        try {
-                          await _service.create(quiz);
-                        } catch (e) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text(QuizPageTexts.ERROR_SUBMIT)));
-                        }
+                    if (_formKey.currentState!.validate()) {
+                      try {
+                        await _service.create(quiz);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(QuizPageTexts.ERROR_SUBMIT)));
                       }
+                    }
                   },
                   child: Text(QuizPageTexts.SUBMIT)),
             ),

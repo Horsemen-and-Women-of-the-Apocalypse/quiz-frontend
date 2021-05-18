@@ -32,7 +32,9 @@ class Question {
   Map<String, dynamic> toJson() {
     var answerResponse = [];
 
-    answers!.forEach((element) { answerResponse.add(element.answerName );});
+    answers!.forEach((element) {
+      answerResponse.add(element.answerName);
+    });
 
     return {
       'question': questionName,

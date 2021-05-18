@@ -16,5 +16,4 @@ class QuizService extends APIService {
         .map((q) => QuizListItem.fromJSON(q))
         .toList();
   }
-
 }
