@@ -75,4 +75,133 @@ void main() {
           isNotNull);
     });
   });
+
+  group('StringMultipleChoiceQuestionFail', () {
+    test('fromJSON', () {
+      expect(
+          () => StringMultipleChoiceQuestionFail.fromJSON({}), throwsException,
+          reason: 'Cannot create a question fail based on an empty JSON');
+      expect(
+          () => StringMultipleChoiceQuestionFail.fromJSON({
+                StringMultipleChoiceQuestionFail.USER_ANSWER_FIELD_NAME:
+                    'answer'
+              }),
+          throwsException,
+          reason: 'Solution is missing');
+      expect(
+          () => StringMultipleChoiceQuestionFail.fromJSON(
+              {StringMultipleChoiceQuestionFail.SOLUTION_FIELD_NAME: 'answer'}),
+          throwsException,
+          reason: 'User\'s answer is missing');
+      expect(
+          () => StringMultipleChoiceQuestionFail.fromJSON({
+                StringMultipleChoiceQuestionFail.USER_ANSWER_FIELD_NAME:
+                    'answer',
+                StringMultipleChoiceQuestionFail.SOLUTION_FIELD_NAME: 0
+              }),
+          throwsException,
+          reason: 'Invalid solution');
+      expect(
+          () => StringMultipleChoiceQuestionFail.fromJSON({
+                StringMultipleChoiceQuestionFail.USER_ANSWER_FIELD_NAME: 0,
+                StringMultipleChoiceQuestionFail.SOLUTION_FIELD_NAME: 'answer'
+              }),
+          throwsException,
+          reason: 'Invalid user\'s answer');
+      expect(
+          StringMultipleChoiceQuestionFail.fromJSON({
+            StringMultipleChoiceQuestionFail.USER_ANSWER_FIELD_NAME: 'answer',
+            StringMultipleChoiceQuestionFail.SOLUTION_FIELD_NAME: 'solution'
+          }),
+          isNotNull);
+    });
+  });
+
+  group('SoloQuizResults', () {
+    test('fromJSON', () {
+      expect(() => SoloQuizResults.fromJSON({}), throwsException,
+          reason: 'Cannot create results based on an empty JSON');
+      expect(
+          () => SoloQuizResults.fromJSON({
+                SoloQuizResults.MAX_SCORE_FIELD_NAME: 20,
+                SoloQuizResults.FAILS_FIELD_NAME: List.of([
+                  {
+                    StringMultipleChoiceQuestionFail.USER_ANSWER_FIELD_NAME:
+                        'A',
+                    StringMultipleChoiceQuestionFail.SOLUTION_FIELD_NAME: 'B'
+                  }
+                ])
+              }),
+          throwsException,
+          reason: 'Score is missing');
+      expect(
+          () => SoloQuizResults.fromJSON({
+                SoloQuizResults.SCORE_FIELD_NAME: 0,
+                SoloQuizResults.FAILS_FIELD_NAME: List.of([
+                  {
+                    StringMultipleChoiceQuestionFail.USER_ANSWER_FIELD_NAME:
+                        'A',
+                    StringMultipleChoiceQuestionFail.SOLUTION_FIELD_NAME: 'B'
+                  }
+                ])
+              }),
+          throwsException,
+          reason: 'Max score is missing');
+      expect(
+          () => SoloQuizResults.fromJSON({
+                SoloQuizResults.SCORE_FIELD_NAME: 0,
+                SoloQuizResults.MAX_SCORE_FIELD_NAME: 20,
+              }),
+          throwsException,
+          reason: 'Fails are missing');
+      expect(
+          () => SoloQuizResults.fromJSON({
+                SoloQuizResults.SCORE_FIELD_NAME: 'A',
+                SoloQuizResults.MAX_SCORE_FIELD_NAME: 20,
+                SoloQuizResults.FAILS_FIELD_NAME: List.of([
+                  {
+                    StringMultipleChoiceQuestionFail.USER_ANSWER_FIELD_NAME:
+                        'A',
+                    StringMultipleChoiceQuestionFail.SOLUTION_FIELD_NAME: 'B'
+                  }
+                ])
+              }),
+          throwsException,
+          reason: 'Invalid score');
+      expect(
+          () => SoloQuizResults.fromJSON({
+                SoloQuizResults.SCORE_FIELD_NAME: 0,
+                SoloQuizResults.MAX_SCORE_FIELD_NAME: 'A',
+                SoloQuizResults.FAILS_FIELD_NAME: List.of([
+                  {
+                    StringMultipleChoiceQuestionFail.USER_ANSWER_FIELD_NAME:
+                        'A',
+                    StringMultipleChoiceQuestionFail.SOLUTION_FIELD_NAME: 'B'
+                  }
+                ])
+              }),
+          throwsException,
+          reason: 'Invalid max score');
+      expect(
+          () => SoloQuizResults.fromJSON({
+                SoloQuizResults.SCORE_FIELD_NAME: 0,
+                SoloQuizResults.MAX_SCORE_FIELD_NAME: 1,
+                SoloQuizResults.FAILS_FIELD_NAME: {}
+              }),
+          throwsException,
+          reason: 'Invalid fails');
+      expect(
+          SoloQuizResults.fromJSON({
+            SoloQuizResults.SCORE_FIELD_NAME: 0,
+            SoloQuizResults.MAX_SCORE_FIELD_NAME: 1,
+            SoloQuizResults.FAILS_FIELD_NAME: List.of([
+              {
+                StringMultipleChoiceQuestionFail.USER_ANSWER_FIELD_NAME: 'A',
+                StringMultipleChoiceQuestionFail.SOLUTION_FIELD_NAME: 'B'
+              }
+            ])
+          }),
+          isNotNull);
+    });
+  });
 }
