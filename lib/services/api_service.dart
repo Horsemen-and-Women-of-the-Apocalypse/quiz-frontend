@@ -16,13 +16,15 @@ class APIService {
     return transformResponse(await http.get(Uri.parse(_url + entryPoint)));
   }
 
-  // TODO: Doc
+  /// Send a POST request on the given entry point with a payload
   Future<dynamic> post(String entryPoint, Object? object) async {
-    return transformResponse(await http.post(Uri.parse(_url + entryPoint),
-        body: jsonEncode(object)));
+    return transformResponse(await http
+        .post(Uri.parse(_url + entryPoint), body: jsonEncode(object), headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    }));
   }
 
-  // TODO: Doc
+  /// Transform a HTTP response into a JSON
   dynamic transformResponse(http.Response response) {
     // Decode body
     var body = jsonDecode(response.body);
