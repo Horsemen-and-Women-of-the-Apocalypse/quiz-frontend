@@ -5,7 +5,6 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
 
 /// Service interacting with API
-/// Service interacting with API
 class APIService {
   final String _url;
 
@@ -25,16 +24,13 @@ class APIService {
 
   // TODO: Doc
   dynamic transformResponse(http.Response response) {
-    if (response.headers['Content-Type'] == null ||
-        !response.headers['Content-Type']!.contains('application/json')) {
-      throw Exception('API response isn\'t a JSON object');
-    }
+    // Decode body
     var body = jsonDecode(response.body);
 
     // Check status code
     if (response.statusCode != 200) {
-      throw Exception(body.error);
+      throw Exception(body['error']);
     }
-    return body.data;
+    return body['data'];
   }
 }
