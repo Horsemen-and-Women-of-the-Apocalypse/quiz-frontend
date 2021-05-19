@@ -1,0 +1,85 @@
+name: Master branch Continuous Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-web:
+    name: Build web and attach docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Get application version
+        id: package-version
+        uses: actions/cumulusds@v0.0.0
+        with:
+          file: pubspec.yaml
+          version: version
+
+      - name: Build the Docker image
+        run: docker build . -t ${{env.docker-img-name}}
+
+      - name: Save the Docker image
+        run: docker save --output ${{env.docker-img-name}}.tar ${{env.docker-img-name}}
+
+      - name: Upload Docker image to release
+        uses: svenstaro/upload-release-action@v1-release
+        with:
+          repo_token: ${{secrets.GITHUB_TOKEN}}
+          file: ${{env.docker-img-name}}.tar
+          asset_name: ${{env.docker-img-name}}.tar
+          tag: ${{steps.package-version.outputs.version}}
+          overwrite: true
+
+  build-android:
+    name: Build android and attach apk
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Get application version
+        id: package-version
+        uses: actions/cumulusds@v0.0.0
+        with:
+          file: pubspec.yaml
+          version: version
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "2.0.6"
+
+      - name: Pub Get Packages
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --split-per-abi --release
+
+      - name: Build APPBUNDLE
+        run: flutter build appbundle --release
+
+      - name: Create Github Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/apk/release/*.apk,build/app/outputs/bundle/release/*.aab"
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    name: Deploy to hosted server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remote ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.REMOTE_HOST}}
+          username: ${{secrets.REMOTE_USER}}
+          password: ${{secrets.REMOTE_PASSWORD}}
+          port: ${{secrets.REMOTE_PORT}}
+          script: ./deploy.sh
