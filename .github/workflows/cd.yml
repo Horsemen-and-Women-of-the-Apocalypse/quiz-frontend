@@ -7,7 +7,7 @@ on:
 
 env:
   docker-img-name: quiz_app_img
-  api_url: "{\"API_URL\": \"\"}"
+  api_url: "{\\\"API_URL\\\": \\\"\\\"}"
 jobs:
   create-config:
     name: Create File
@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+
       - name: Get application version
         id: package-version
         uses: CumulusDS/get-yaml-paths-action@v0.1.0
