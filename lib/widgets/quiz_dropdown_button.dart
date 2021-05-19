@@ -30,6 +30,10 @@ class _QuizDropdownButtonState extends State<QuizDropdownButton> {
     // Fetch quizzes and set default
     _quizzesFuture = _service.list();
     _quizzesFuture!.then((quizzes) {
+      if (quizzes.isEmpty) {
+        return;
+      }
+
       setState(() {
         _selectedQuiz = quizzes[0];
       });
