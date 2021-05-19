@@ -5,16 +5,25 @@ on:
     branches:
       - master
 
+env:
+  docker-img-name: quiz_app_img
+  api_url: "{\"API_URL\": \"\"}"
 jobs:
-  build-web:
-    name: Build web and attach docker image
+  create-config:
+    name: Create File
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-
+      - run: echo ${{env.api_url}} > ./assets/cfg/app_settings.json
+  build-web:
+    name: Build web and attach docker image
+    needs: create-config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
       - name: Get application version
         id: package-version
-        uses: actions/cumulusds@v0.0.0
+        uses: CumulusDS/get-yaml-paths-action@v0.1.0
         with:
           file: pubspec.yaml
           version: version
@@ -36,13 +45,14 @@ jobs:
 
   build-android:
     name: Build android and attach apk
+    needs: create-config
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
 
       - name: Get application version
         id: package-version
-        uses: actions/cumulusds@v0.0.0
+        uses: CumulusDS/get-yaml-paths-action@v0.1.0
         with:
           file: pubspec.yaml
           version: version
@@ -60,26 +70,16 @@ jobs:
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --split-per-abi --release
+        run: flutter build apk --release
 
       - name: Build APPBUNDLE
         run: flutter build appbundle --release
 
       - name: Create Github Release
-        uses: ncipollo/release-action@v1
+        uses: svenstaro/upload-release-action@v1-release
         with:
-          artifacts: "build/app/outputs/apk/release/*.apk,build/app/outputs/bundle/release/*.aab"
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-  deploy:
-    name: Deploy to hosted server
-    runs-on: ubuntu-latest
-    steps:
-      - name: Remote ssh
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{secrets.REMOTE_HOST}}
-          username: ${{secrets.REMOTE_USER}}
-          password: ${{secrets.REMOTE_PASSWORD}}
-          port: ${{secrets.REMOTE_PORT}}
-          script: ./deploy.sh
+          repo_token: ${{secrets.GITHUB_TOKEN}}
+          file: ./build/app/outputs/flutter-apk/app-release.apk
+          asset_name: app-release.apk
+          tag: ${{steps.package-version.outputs.version}}
+          overwrite: true
