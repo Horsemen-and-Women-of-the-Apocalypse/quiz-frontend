@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/model/creation/creation.dart';
+import 'package:quiz/pages/home.dart';
 import 'package:quiz/services/api/quiz_service.dart';
 import 'package:quiz/utils/quiz_text.dart';
 
+///Widget for [Quiz] creation
 class QuizCreationPage extends StatefulWidget {
   @override
   _QuizCreationPageState createState() => _QuizCreationPageState();
 }
 
+///State for [QuizCreationPage]
 class _QuizCreationPageState extends State<QuizCreationPage> {
   final _formKey = GlobalKey<FormState>();
-
   final QuizService _service = QuizService();
-
-  Quiz quiz = Quiz();
+  final Quiz _quiz = Quiz();
 
   var padding = 15.0;
 
@@ -27,7 +28,7 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-                padding: EdgeInsets.only(bottom: padding * 2),
+                padding: EdgeInsets.fromLTRB(0, padding * 2, 0, padding * 2),
                 child: Text(
                   QuizPageTexts.TITLE,
                   style: Theme.of(context).textTheme.headline3,
@@ -35,10 +36,9 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
             Padding(
                 padding: EdgeInsets.all(15),
                 child: TextFormField(
-                  controller: quiz.quizController,
                   onChanged: (value) {
                     setState(() {
-                      quiz.quizName = value;
+                      _quiz.quizName = value;
                     });
                   },
                   validator: (value) {
@@ -52,7 +52,7 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                 )),
             Flexible(
               child: ListView.builder(
-                  itemCount: quiz.questions!.length,
+                  itemCount: _quiz.getQuestionsSize(),
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
                       padding: EdgeInsets.all(padding),
@@ -66,11 +66,9 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                         ),
                         child: ListTile(
                           title: TextFormField(
-                            controller:
-                                quiz.questions![index].questionController,
                             onChanged: (value) {
                               setState(() {
-                                quiz.questions![index].questionName = value;
+                                _quiz.getQuestionAt(index).questionName = value;
                               });
                             },
                             validator: (value) {
@@ -82,12 +80,12 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                             decoration: InputDecoration(
                                 hintText: QuizPageTexts.INPUT_QUESTION),
                           ),
-                          leading: (quiz.questions!.length > 1)
+                          leading: (_quiz.getQuestionsSize() > 1)
                               ? IconButton(
                                   icon: Icon(Icons.delete),
                                   onPressed: () {
                                     setState(() {
-                                      quiz.questions!.removeAt(index);
+                                      _quiz.removeQuestionAt(index);
                                     });
                                   },
                                 )
@@ -97,7 +95,7 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                             icon: Icon(Icons.add),
                             onPressed: () {
                               setState(() {
-                                quiz.questions!.add(Question());
+                                _quiz.addQuestion();
                               });
                             },
                           ),
@@ -108,26 +106,26 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                    height: (quiz.questions![index].answers!
-                                                .length *
+                                    height: (_quiz
+                                                .getQuestionAt(index)
+                                                .getAnswersSize() *
                                             80)
                                         .toDouble(),
                                     width:
                                         MediaQuery.of(context).size.width / 1.5,
                                     child: ListView.builder(
-                                        itemCount: quiz
-                                            .questions![index].answers!.length,
+                                        itemCount: _quiz
+                                            .getQuestionAt(index)
+                                            .getAnswersSize(),
                                         itemBuilder:
                                             (BuildContext context, int i) {
                                           return ListTile(
                                             title: TextFormField(
-                                              controller: quiz.questions![index]
-                                                  .answers![i].answerController,
                                               onChanged: (value) {
                                                 setState(() {
-                                                  quiz
-                                                      .questions![index]
-                                                      .answers![i]
+                                                  _quiz
+                                                      .getQuestionAt(index)
+                                                      .getAnswerAt(i)
                                                       .answerName = value;
                                                 });
                                               },
@@ -139,7 +137,9 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                                                 return null;
                                               },
                                               style: TextStyle(
-                                                color: (quiz.questions![index]
+                                                color: (_quiz
+                                                            .getQuestionAt(
+                                                                index)
                                                             .answer ==
                                                         i)
                                                     ? Colors.green
@@ -149,35 +149,41 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                                                   hintText: QuizPageTexts
                                                       .INPUT_ANSWER),
                                             ),
-                                            leading: (quiz.questions![index]
-                                                        .answers!.length >
+                                            leading: (_quiz
+                                                        .getQuestionAt(index)
+                                                        .getAnswersSize() >
                                                     3)
                                                 ? IconButton(
                                                     icon: Icon(Icons.delete),
                                                     onPressed: () {
                                                       setState(() {
-                                                        if (quiz
-                                                                .questions![
-                                                                    index]
+                                                        if (_quiz
+                                                                .getQuestionAt(
+                                                                    index)
                                                                 .answer >=
                                                             i) {
-                                                          quiz.questions![index]
+                                                          _quiz
+                                                              .getQuestionAt(
+                                                                  index)
                                                               .answer = 0;
                                                         }
-                                                        quiz.questions![index]
-                                                            .answers!
-                                                            .removeAt(i);
+                                                        _quiz
+                                                            .getQuestionAt(
+                                                                index)
+                                                            .removeAnswerAt(i);
                                                       });
                                                     },
                                                   )
                                                 : null,
                                             trailing: Radio(
                                               value: i,
-                                              groupValue:
-                                                  quiz.questions![index].answer,
+                                              groupValue: _quiz
+                                                  .getQuestionAt(index)
+                                                  .answer,
                                               onChanged: (int? newValue) => {
                                                 setState(() {
-                                                  quiz.questions![index]
+                                                  _quiz
+                                                          .getQuestionAt(index)
                                                           .answer =
                                                       (newValue)!.toInt();
                                                 })
@@ -194,8 +200,9 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                                         icon: Icon(Icons.add),
                                         onPressed: () {
                                           setState(() {
-                                            quiz.questions![index].answers!
-                                                .add(Answer());
+                                            _quiz
+                                                .getQuestionAt(index)
+                                                .addAnswer();
                                           });
                                         },
                                       )
@@ -215,10 +222,15 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       try {
-                        await _service.create(quiz);
+                        await _service.create(_quiz);
+                        await Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                            (r) => false);
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(QuizPageTexts.ERROR_SUBMIT)));
+                            content: Text(QuizPageTexts.ERROR_SUBMIT,
+                                style: TextStyle(color: Colors.red))));
                       }
                     }
                   },

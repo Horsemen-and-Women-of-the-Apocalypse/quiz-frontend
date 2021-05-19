@@ -1,65 +1,99 @@
-import 'package:flutter/material.dart';
-
+///Class to represent a quiz
 class Quiz {
-  final quizController = TextEditingController();
-
   String quizName = '';
-  List<Question>? questions;
 
-  Quiz() {
-    questions = initQuestion();
+  final List<Question> _questions = initQuestion();
+
+  ///[Quiz] constructor
+  Quiz();
+
+  ///Return [Question] at index
+  Question getQuestionAt(int index) {
+    return _questions[index];
   }
 
+  ///Add [Question]
+  void addQuestion() {
+    _questions.add(Question._());
+  }
+
+  ///Remove [Question] at index
+  void removeQuestionAt(int index) {
+    _questions.removeAt(index);
+  }
+
+  ///Get size of [List<Question>]
+  int getQuestionsSize() {
+    return _questions.length;
+  }
+
+  ///Mapper to Json
   Map<String, dynamic> toJson() {
     return {
       'name': quizName,
-      'questions': questions,
+      'questions': _questions,
     };
   }
 }
 
+///Class to represent a question in a [Quiz]
 class Question {
-  final questionController = TextEditingController();
   int answer = 0;
-
   String questionName = '';
-  List<Answer>? answers;
 
-  Question() {
-    answers = initAnswer();
+  final List<Answer> _answers = initAnswer();
+
+  ///Private [Question] constructor
+  Question._();
+
+  ///Return [Answer] at index
+  Answer getAnswerAt(int index) {
+    return _answers[index];
   }
 
+  ///Add [Answer]
+  void addAnswer() {
+    _answers.add(Answer._());
+  }
+
+  ///Remove [Answer] at index
+  void removeAnswerAt(int index) {
+    _answers.removeAt(index);
+  }
+
+  ///Get size of [List<Question>]
+  int getAnswersSize() {
+    return _answers.length;
+  }
+
+  ///Mapper to Json
   Map<String, dynamic> toJson() {
-    var answerResponse = [];
-
-    answers!.forEach((element) {
-      answerResponse.add(element.answerName);
-    });
-
     return {
       'question': questionName,
       'solutionIndex': answer,
-      'choices': answerResponse
+      'choices': _answers.map((e) => e.answerName).toList()
     };
   }
 }
 
+///Class to represent an answer in a [Question]
 class Answer {
-  final answerController = TextEditingController();
-
   String answerName = '';
 
-  Answer();
+  ///Private [Answer] constructor
+  Answer._();
 }
 
+///Method to init a list of {Question}
 List<Question> initQuestion() {
   return List.generate(1, (index) {
-    return Question();
+    return Question._();
   });
 }
 
+///Method to init a list of {Answer}
 List<Answer> initAnswer() {
   return List.generate(3, (index) {
-    return Answer();
+    return Answer._();
   });
 }
