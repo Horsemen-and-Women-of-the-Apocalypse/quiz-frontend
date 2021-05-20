@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quiz/pages/multi/lobby_start_room.dart';
 import 'package:quiz/services/api/lobby_service.dart';
 import 'package:quiz/utils/lobby_texts.dart';
 import 'package:quiz/utils/page_texts.dart';
@@ -69,9 +70,14 @@ class LobbyJoinDialog extends StatelessWidget {
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               try {
-                await _service.join('/lobby/${lobbyIdController.text}/join',
+                var player = await _service.join(
+                    'lobby/${lobbyIdController.text}/join',
                     nameController.text);
-                // TODO: Switch to lobby
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LobbyStartPage(
+                            lobbyIdController.text, player.getId(), false)));
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(LobbyPageTexts.ERROR_SUBMIT,
