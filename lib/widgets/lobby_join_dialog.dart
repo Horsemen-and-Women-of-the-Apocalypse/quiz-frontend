@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/remyc/android-workspace/quizfrontend/lib/pages/multi/lobby_start_room.dart';
+import 'package:quiz/pages/multi/lobby_start_room.dart';
 import 'package:quiz/services/api/lobby_service.dart';
 import 'package:quiz/utils/lobby_texts.dart';
 import 'package:quiz/utils/page_texts.dart';

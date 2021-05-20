@@ -24,7 +24,7 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
   Future<LobbyInfo>? lobbyInfo;
   io.Socket? socket;
 
-   io.Socket initSocketClient() {
+  io.Socket initSocketClient() {
     var socket = io.io(
         'http://localhost:3000',
         io.OptionBuilder().setPath('/ws').setQuery({
@@ -49,7 +49,7 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     socket?.close();
     super.dispose();
   }
@@ -85,7 +85,7 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => HomePage()),
-                            (r) => false);
+                        (r) => false);
                   },
                   child: Text(LobbyPageTexts.LEAVE_LOBBY),
                 ),

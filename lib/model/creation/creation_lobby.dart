@@ -50,12 +50,13 @@ class Lobby {
         !json.containsKey(OWNER) ||
         !(json[LOBBYID] is String) ||
         !(json[LOBBYNAME] is String) ||
-        !(json[QUIZ] is Object) ||
-        !(json[OWNER] is Object)) {
-      throw Exception('Malformed QuizListItem');
+        !(json[QUIZ] is Map<String, dynamic>) ||
+        !(json[OWNER] is Map<String, dynamic>)) {
+      throw Exception('Malformed Lobby');
     }
 
-    return Lobby._(json[LOBBYID], json[LOBBYNAME], json[QUIZ], json[OWNER]);
+    return Lobby._(json[LOBBYID], json[LOBBYNAME],
+        QuizListItem.fromJSON(json[QUIZ]), Player.fromJSON(json[OWNER]));
   }
 }
 
@@ -74,7 +75,7 @@ class Player {
         !json.containsKey(PLAYERNAME) ||
         !(json[PLAYERID] is String) ||
         !(json[PLAYERNAME] is String)) {
-      throw Exception('Malformed QuizListItem');
+      throw Exception('Malformed Player');
     }
 
     return Player._(json[PLAYERID], json[PLAYERNAME]);

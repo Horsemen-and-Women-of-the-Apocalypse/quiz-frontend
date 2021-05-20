@@ -228,6 +228,7 @@ class _QuizCreationPageState extends State<QuizCreationPage> {
                             MaterialPageRoute(builder: (context) => HomePage()),
                             (r) => false);
                       } catch (e) {
+                        print(e);
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(QuizPageTexts.ERROR_SUBMIT,
                                 style: TextStyle(color: Colors.red))));
