@@ -35,10 +35,6 @@ class QuizSelectionPage extends StatelessWidget {
                     }
 
                     var questions = await _service.findById(selectedQuiz.id);
-                    if (questions == null) {
-                      throw Exception('No quiz found for: ${selectedQuiz.id}');
-                    }
-
                     await Navigator.push(
                         context,
                         MaterialPageRoute(

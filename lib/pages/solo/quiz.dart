@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/model/api/quiz.dart';
+import 'package:quiz/pages/solo/quiz_results.dart';
+import 'package:quiz/services/api/quiz_service.dart';
 import 'package:quiz/widgets/quiz_form.dart';
 
 /// Solo mode quiz page
 class SoloQuizPage extends StatelessWidget {
+  final QuizService _service = QuizService();
   final List<AQuizQuestion> _questions;
   final QuizListItem _quiz;
 
@@ -31,10 +34,14 @@ class SoloQuizPage extends StatelessWidget {
   }
 
   /// Callback called when form is completed
-  void onComplete(BuildContext context, QuizFormData form) {
+  void onComplete(BuildContext context, QuizFormData form) async {
     try {
-      // TODO: Send answers to API
-      debugPrint('Send answers');
+      var results = await _service.answer(_quiz.id, form);
+
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SoloQuizResultsPage(results)));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Failed to send answers',
