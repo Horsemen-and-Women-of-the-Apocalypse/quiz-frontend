@@ -11,7 +11,6 @@ class QuizService extends APIService {
         .toList();
   }
 
-  // Get quiz based on its id
   Future<List<AQuizQuestion>?> findById(String id) async {
     var data = await get('quiz/$id/questions');
     if (data == null) {
@@ -22,10 +21,8 @@ class QuizService extends APIService {
         .map((e) => AQuizQuestion.fromJSON(e))
         .toList();
   }
-
-  Future<List<QuizListItem>> create(Quiz quiz) async {
-    return (await post('quiz/create', quiz) as List<dynamic>)
-        .map((q) => QuizListItem.fromJSON(q))
-        .toList();
+  /// Create the given quiz, returning its id
+  Future<String> create(Quiz quiz) async {
+    return await post('quiz/create', quiz) as String;
   }
 }
