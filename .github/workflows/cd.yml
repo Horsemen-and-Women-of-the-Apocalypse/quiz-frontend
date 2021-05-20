@@ -7,20 +7,17 @@ on:
 
 env:
   docker-img-name: quiz_app_img
-  api_url: "{\\\"API_URL\\\": \\\"\\\"}"
+  api_url: "{\\\"API_URL\\\": \\\"http://164.132.98.183:8906/\\\"}"
 jobs:
-  create-config:
-    name: Create File
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - run: echo ${{env.api_url}} > ./assets/cfg/app_settings.json
   build-web:
     name: Build web and attach docker image
-    needs: create-config
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Get project
+        uses: actions/checkout@v1
+
+      - name: Create file
+        run: echo ${{env.api_url}} > ./assets/cfg/app_settings.json
 
       - name: Get application version
         id: package-version
@@ -46,10 +43,13 @@ jobs:
 
   build-android:
     name: Build android and attach apk
-    needs: create-config
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Get project
+        uses: actions/checkout@v1
+
+      - name: Create file
+        run: echo ${{env.api_url}} > ./assets/cfg/app_settings.json
 
       - name: Get application version
         id: package-version
