@@ -23,7 +23,7 @@ class QuizService extends APIService {
   Future<String> create(Quiz quiz) async {
     return await post('quiz/create', quiz) as String;
   }
-  
+
   /// Answer the given quiz
   Future<SoloQuizResults> answer(String quizId, QuizFormData answers) async {
     return SoloQuizResults.fromJSON(await post('quiz/$quizId/answer', answers));
