@@ -25,11 +25,6 @@ class APIService {
 
   // TODO: Doc
   dynamic transformResponse(http.Response response) {
-    if (response.headers['Content-Type'] == null ||
-        !response.headers['Content-Type']!.contains('application/json')) {
-      throw Exception('API response isn\'t a JSON object');
-    }
-
     var body = jsonDecode(response.body);
 
     // Check status code

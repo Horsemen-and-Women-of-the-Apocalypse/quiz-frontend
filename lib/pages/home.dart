@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/pages/quiz_creation.dart';
 import 'package:quiz/utils/page_texts.dart';
+import 'package:quiz/widgets/lobby_create_dialog.dart';
 import 'package:quiz/widgets/lobby_join_dialog.dart';
 
 /// Home page widget
@@ -33,7 +34,13 @@ class HomePage extends StatelessWidget {
                 child: Text(HomepageTexts.SOLO_BUTTON_TEXT))),
             buttonPaddingGenerator(ElevatedButton(
                 key: Key(HomepageTexts.LOBBY_CREATION_BUTTON_TEXT),
-                onPressed: null, // TODO: Switch to lobby creation page
+                onPressed: () async {
+                  await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return LobbyCreateDialog(context);
+                      });
+                },
                 style: buttonStyle,
                 child: Text(HomepageTexts.LOBBY_CREATION_BUTTON_TEXT))),
             buttonPaddingGenerator(ElevatedButton(
