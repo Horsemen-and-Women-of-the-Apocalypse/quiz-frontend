@@ -25,7 +25,6 @@ class APIService {
 
   /// Extract data from the given HTTP response
   dynamic extractData(http.Response response) {
-    // Decode body
     var body = jsonDecode(response.body);
 
     // Check status code

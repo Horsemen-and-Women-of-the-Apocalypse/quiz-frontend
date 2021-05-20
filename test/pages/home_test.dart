@@ -26,7 +26,7 @@ void main() {
             .widget<ElevatedButton>(
                 find.byKey(Key(HomepageTexts.LOBBY_JOINING_BUTTON_TEXT)))
             .enabled,
-        isFalse);
+        isTrue);
     expect(
         tester
             .widget<ElevatedButton>(
