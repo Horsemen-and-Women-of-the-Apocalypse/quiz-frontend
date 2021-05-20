@@ -13,6 +13,10 @@ class LobbyService extends APIService {
     return Lobby.fromJSON((await post('lobby/create', lobby) as dynamic));
   }
 
+  Future<Lobby> results(String lobbyId) async {
+    return Lobby.fromJSON((await get('lobby/$lobbyId/results') as dynamic));
+  }
+
   Future<String> start(String lobbyId, String playerId) async {
     return (await post('lobby/$lobbyId/start', {'playerId': playerId})
         as dynamic);
