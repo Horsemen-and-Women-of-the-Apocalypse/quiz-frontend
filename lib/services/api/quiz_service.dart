@@ -12,16 +12,16 @@ class QuizService extends APIService {
         .toList();
   }
 
+  /// Create the given quiz, returning its id
+  Future<String> create(Quiz quiz) async {
+    return await post('quiz/create', quiz) as String;
+  }
+
   /// Get quiz based on its id
   Future<List<AQuizQuestion>> findById(String id) async {
     return (await get('quiz/$id/questions') as List<dynamic>)
         .map((e) => AQuizQuestion.fromJSON(e))
         .toList();
-  }
-
-  /// Create the given quiz, returning its id
-  Future<String> create(Quiz quiz) async {
-    return await post('quiz/create', quiz) as String;
   }
 
   /// Answer the given quiz
