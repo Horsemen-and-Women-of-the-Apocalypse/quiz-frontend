@@ -7,4 +7,6 @@ class LobbyPageTexts {
   static const String ERROR_SUBMIT_CREATE = 'CANNOT CREATE LOBBY';
   static const String ERROR_NAME_EMPTY = 'PLEASE PUT A NAME';
   static const String ERROR_ID_EMPTY = 'PLEASE PUT A LOBBY ID';
+  static const String ERROR_BACK = 'BACK TO HOME';
+  static const String START_GAME = 'START';
 }

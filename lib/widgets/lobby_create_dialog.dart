@@ -84,7 +84,11 @@ class LobbyCreateDialog extends StatelessWidget {
             if (_formKey.currentState!.validate()) {
               try {
                 await _service.create(lobby);
-                // TODO: Switch to lobby
+                //TODO
+                /* await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LobbyStartPage(lobbyIdController.text, playerId, true)));*/
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(LobbyPageTexts.ERROR_SUBMIT_CREATE,
