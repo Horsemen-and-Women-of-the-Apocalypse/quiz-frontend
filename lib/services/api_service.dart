@@ -6,19 +6,19 @@ import 'package:http/http.dart' as http;
 
 /// Service interacting with API
 class APIService {
-  final String _url;
+  final String url;
 
   /// Constructor
-  APIService() : _url = GlobalConfiguration().getValue('API_URL');
+  APIService() : url = GlobalConfiguration().getValue('API_URL');
 
   /// Send a GET request on the given entry point
   Future<dynamic> get(String entryPoint) async {
-    return extractData(await http.get(Uri.parse(_url + entryPoint)));
+    return extractData(await http.get(Uri.parse(url + entryPoint)));
   }
 
   /// Send a POST request on the given entry point with the payload
   Future<dynamic> post(String entryPoint, Object? payload) async {
-    return extractData(await http.post(Uri.parse(_url + entryPoint),
+    return extractData(await http.post(Uri.parse(url + entryPoint),
         body: jsonEncode(payload),
         headers: {'Content-Type': 'application/json'}));
   }

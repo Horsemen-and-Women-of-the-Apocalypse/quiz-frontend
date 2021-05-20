@@ -62,10 +62,19 @@ class Lobby {
 
 class Player {
   static const PLAYERID = 'id';
+  static const PLAYERHALFID = 'playerId';
   static const PLAYERNAME = 'name';
 
   String _id = '';
   String _name = '';
+
+  String getId() {
+    return _id;
+  }
+
+  String getName() {
+    return _name;
+  }
 
   Player._(this._id, this._name);
   Player();
@@ -79,5 +88,13 @@ class Player {
     }
 
     return Player._(json[PLAYERID], json[PLAYERNAME]);
+  }
+
+  factory Player.fromHALFJSON(Map<String, dynamic> json, String playerName) {
+    if (!json.containsKey(PLAYERHALFID) || !(json[PLAYERHALFID] is String)) {
+      throw Exception('Malformed Player');
+    }
+
+    return Player._(json[PLAYERHALFID], playerName);
   }
 }

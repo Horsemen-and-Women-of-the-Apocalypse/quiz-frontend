@@ -11,4 +11,6 @@ class LobbyPageTexts {
   static const String START_GAME = 'START';
   static const String LEAVE_LOBBY = 'LEAVE LOBBY';
   static const String ERROR_GET_LOBBY = 'UNABLE TO GET LOBBY';
+  static const String PLAYERS = 'PLAYERS :';
+  static const String ERROR_START = 'CANNOT LAUNCH THE GAME';
 }

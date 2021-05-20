@@ -6,6 +6,7 @@ import 'package:quiz/services/api/lobby_service.dart';
 import 'package:quiz/utils/lobby_texts.dart';
 import 'package:quiz/utils/quiz_text.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:flutter/services.dart';
 
 ///Widget for [Quiz] creation
 class LobbyStartPage extends StatefulWidget {
@@ -22,29 +23,30 @@ class LobbyStartPage extends StatefulWidget {
 ///State for [QuizCreationPage]
 class _LobbyStartPageState extends State<LobbyStartPage> {
   final LobbyService _service = LobbyService();
-  Future<LobbyInfo>? lobbyInfo;
+  Future<LobbyInfo>? lobbyInfoFuture;
+  LobbyInfo? lobbyInfo;
   io.Socket? socket;
 
   io.Socket initSocketClient() {
     var socket = io.io(
-        'http://localhost:3000',
+        _service.url,
         io.OptionBuilder().setPath('/ws').setQuery({
           'lobbyId': widget._lobbyId,
           'playerId': widget._playerId
         }).build());
-    socket.onConnect((_) {
-      print('connect');
+    socket.on('playerHasJoined', (data) {
+      if (lobbyInfo == null) return;
+      setState(() {
+        lobbyInfo!.playerNames.add(data);
+      });
     });
-    socket.on('newPlayer', (data) {
-      (lobbyInfo as LobbyInfo).playerNames.add(data);
-    });
-    socket.onDisconnect((_) => socket.emit('disconnect'));
     return socket;
   }
 
   @override
   void initState() {
-    lobbyInfo = _service.findById(widget._lobbyId, widget._playerId);
+    lobbyInfoFuture = _service.findById(widget._lobbyId, widget._playerId);
+    lobbyInfoFuture!.then((value) => lobbyInfo = value);
     socket = initSocketClient();
     super.initState();
   }
@@ -59,22 +61,77 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: lobbyInfo,
+        future: lobbyInfoFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                    '${LobbyPageTexts.LOBBY_USER_NAME} : ${(snapshot.data as LobbyInfo).name}',
-                    style: Theme.of(context).textTheme.headline3),
-                Text(
-                    '${QuizPageTexts.INPUT_QUIZ_NAME} : ${(snapshot.data as LobbyInfo).quizName}',
-                    style: Theme.of(context).textTheme.headline4),
-                Text(
-                    '${LobbyPageTexts.LOBBY_OWNER_NAME} : ${(snapshot.data as LobbyInfo).ownerName}',
-                    style: Theme.of(context).textTheme.headline4),
+                Flexible(
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    width: MediaQuery.of(context).size.width,
+                    height: 60,
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Text(
+                          '${LobbyPageTexts.LOBBY_USER_NAME} : ${(snapshot.data as LobbyInfo).name}',
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.headline3),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    width: MediaQuery.of(context).size.width,
+                    height: 60,
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Text(
+                          '${QuizPageTexts.INPUT_QUIZ_NAME} : ${(snapshot.data as LobbyInfo).quizName}',
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.headline4),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    width: MediaQuery.of(context).size.width,
+                    height: 60,
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Text(
+                          '${LobbyPageTexts.LOBBY_OWNER_NAME} : ${(snapshot.data as LobbyInfo).ownerName}',
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.headline4),
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('${LobbyPageTexts.LOBBY_ID} : ${widget._lobbyId}'),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: GestureDetector(
+                        onTap: () {
+                          Clipboard.setData(
+                              ClipboardData(text: widget._lobbyId));
+                        },
+                        child: Icon(Icons.copy),
+                      ),
+                    )
+                  ],
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 15),
+                  alignment: Alignment.centerLeft,
+                  child: Text(LobbyPageTexts.PLAYERS),
+                ),
                 Expanded(
                     child: Padding(
                   padding: const EdgeInsets.all(15),
@@ -82,8 +139,16 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
                       itemCount:
                           (snapshot.data as LobbyInfo).playerNames.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Text(
-                            (snapshot.data as LobbyInfo).playerNames[index]);
+                        return Row(
+                          children: [
+                            Icon(Icons.account_circle_rounded),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: Text((snapshot.data as LobbyInfo)
+                                  .playerNames[index]),
+                            ),
+                          ],
+                        );
                       }),
                 )),
                 ElevatedButton(
@@ -100,7 +165,17 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
                   Padding(
                     padding: const EdgeInsets.all(15),
                     child: ElevatedButton(
-                      onPressed: () => null, //TODO
+                      onPressed: () async {
+                        try {
+                          await _service.start(
+                              widget._lobbyId, widget._playerId);
+                          //TODO ROUTAGE
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(LobbyPageTexts.ERROR_START,
+                                  style: TextStyle(color: Colors.red))));
+                        }
+                      },
                       child: Text(LobbyPageTexts.START_GAME),
                     ),
                   )
@@ -108,7 +183,6 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
             );
           }
           if (snapshot.hasError) {
-            print(snapshot.error);
             return Container(
               width: MediaQuery.of(context).size.width,
               child: Column(

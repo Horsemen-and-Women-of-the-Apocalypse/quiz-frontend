@@ -70,14 +70,14 @@ class LobbyJoinDialog extends StatelessWidget {
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               try {
-                var playerId = await _service.join(
-                    '/lobby/${lobbyIdController.text}/join',
+                var player = await _service.join(
+                    'lobby/${lobbyIdController.text}/join',
                     nameController.text);
                 await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => LobbyStartPage(
-                            lobbyIdController.text, playerId, false)));
+                            lobbyIdController.text, player.getId(), false)));
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(LobbyPageTexts.ERROR_SUBMIT,
