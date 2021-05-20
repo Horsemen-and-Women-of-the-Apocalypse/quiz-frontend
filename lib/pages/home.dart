@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/pages/solo/quiz_selection.dart';
 import 'package:quiz/utils/page_texts.dart';
+import 'package:quiz/utils/lobby_texts.dart';
+import 'package:quiz/widgets/lobby_join_dialog.dart';
 
 /// Home page widget
 class HomePage extends StatelessWidget {
@@ -40,7 +42,19 @@ class HomePage extends StatelessWidget {
                 child: Text(HomepageTexts.LOBBY_CREATION_BUTTON_TEXT))),
             buttonPaddingGenerator(ElevatedButton(
                 key: Key(HomepageTexts.LOBBY_JOINING_BUTTON_TEXT),
-                onPressed: null, // TODO: Switch to lobby joining page
+                onPressed: () async {
+                  try {
+                    await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return LobbyJoinDialog(context);
+                        });
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(LobbyPageTexts.ERROR_SUBMIT,
+                            style: TextStyle(color: Colors.red))));
+                  }
+                },
                 style: buttonStyle,
                 child: Text(HomepageTexts.LOBBY_JOINING_BUTTON_TEXT)))
           ],

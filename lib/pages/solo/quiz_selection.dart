@@ -24,7 +24,7 @@ class QuizSelectionPage extends StatelessWidget {
             Padding(padding: EdgeInsets.only(bottom: padding), child: dropdown),
             ElevatedButton(
                 onPressed: () {
-                  // TODO: Start quiz
+                  throw Error();
                 },
                 child: Text('START'))
           ],
