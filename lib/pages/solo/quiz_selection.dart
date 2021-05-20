@@ -1,9 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quiz/pages/solo/quiz.dart';
+import 'package:quiz/services/api/quiz_service.dart';
 import 'package:quiz/widgets/quiz_dropdown_button.dart';
 
 /// Solo quiz selection page
 class QuizSelectionPage extends StatelessWidget {
+  final QuizService _service = QuizService();
+
   @override
   Widget build(BuildContext context) {
     var dropdown = QuizDropdownButton();
@@ -23,8 +26,29 @@ class QuizSelectionPage extends StatelessWidget {
             ),
             Padding(padding: EdgeInsets.only(bottom: padding), child: dropdown),
             ElevatedButton(
-                onPressed: () {
-                  // TODO: Start quiz
+                onPressed: () async {
+                  // Start quiz
+                  try {
+                    var selectedQuiz = dropdown.quiz();
+                    if (selectedQuiz == null) {
+                      return;
+                    }
+
+                    var questions = await _service.findById(selectedQuiz.id);
+                    if (questions == null) {
+                      throw Exception('No quiz found for: ${selectedQuiz.id}');
+                    }
+
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                SoloQuizPage(selectedQuiz, questions)));
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Failed to retrieve selected quiz',
+                            style: TextStyle(color: Colors.red))));
+                  }
                 },
                 child: Text('START'))
           ],
