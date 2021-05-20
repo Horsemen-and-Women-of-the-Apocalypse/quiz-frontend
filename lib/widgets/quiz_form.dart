@@ -79,6 +79,7 @@ class _QuizFormState extends State<QuizForm> {
       return Step(
           title: Text(question.question),
           content: DropdownButton<Object>(
+              isExpanded: true,
               onChanged: (newValue) {
                 setState(() {
                   _form.answers[questionIndex] = newValue;
