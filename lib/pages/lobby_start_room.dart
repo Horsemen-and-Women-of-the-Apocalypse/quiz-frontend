@@ -3,9 +3,8 @@ import 'package:quiz/model/api/lobby.dart';
 import 'package:quiz/model/creation/creation.dart';
 import 'package:quiz/pages/home.dart';
 import 'package:quiz/services/api/lobby_service.dart';
-import 'package:quiz/services/api/quiz_service.dart';
 import 'package:quiz/utils/lobby_texts.dart';
-import 'package:quiz/utils/quiz_text.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 ///Widget for [Quiz] creation
 class LobbyStartPage extends StatefulWidget {
@@ -24,10 +23,26 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
   final LobbyService _service = LobbyService();
   Future<LobbyInfo>? lobbyInfo;
 
+  void initSocketClient() {
+    var socket = io.io(
+        'http://localhost:3000',
+        io.OptionBuilder().setPath('/ws').setQuery({
+          'lobbyId': widget._lobbyId,
+          'playerId': widget._playerId
+        }).build());
+    socket.onConnect((_) {
+      print('connect');
+    });
+    socket.on('newPlayer', (data) {
+      (lobbyInfo as LobbyInfo).playerNames.add(data);
+    });
+    socket.onDisconnect((_) => socket.emit('disconnect'));
+  }
+
   @override
   void initState() {
     lobbyInfo = _service.findById(widget._lobbyId, widget._playerId);
-
+    initSocketClient();
     super.initState();
   }
 

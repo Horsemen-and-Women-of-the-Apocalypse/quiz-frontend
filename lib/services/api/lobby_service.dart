@@ -14,7 +14,7 @@ class LobbyService extends APIService {
 
   /// Get LobbyInfo based on its id
   Future<LobbyInfo> findById(String lobbyId, String playerId) async {
-    return (await get('/lobby/${lobbyId}/info') as dynamic)
+    return (await get('/lobby/$lobbyId/info') as dynamic)
         .map((e) => LobbyInfo.fromJSON(e));
   }
 }

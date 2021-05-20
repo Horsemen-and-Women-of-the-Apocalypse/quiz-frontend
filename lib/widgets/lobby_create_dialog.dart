@@ -14,7 +14,7 @@ class LobbyCreateDialog extends StatelessWidget {
   final TextEditingController ownerNameController = TextEditingController();
 
   final Lobby lobby = Lobby();
-  final Widget dropdown = QuizDropdownButton();
+  final dropdown = QuizDropdownButton();
 
   LobbyCreateDialog(this.context);
 
@@ -83,6 +83,9 @@ class LobbyCreateDialog extends StatelessWidget {
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               try {
+                lobby.ownerName = ownerNameController.text;
+                lobby.name = nameController.text;
+                lobby.quiz = dropdown.quiz();
                 await _service.create(lobby);
                 //TODO
                 /* await Navigator.push(
