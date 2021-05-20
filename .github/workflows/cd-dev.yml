@@ -5,8 +5,6 @@ on:
     branches:
       - develop
 
-env:
-  docker-img-name: quiz-dev_app_img
 jobs:
   deploy:
     name: Deploy to hosted server
