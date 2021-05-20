@@ -7,5 +7,5 @@ class QuizPageTexts {
   static const String ADD_ANSWER = 'ADD ANSWER';
   static const String ERROR_EMPTY = 'EMPTY VALUE NOT ALLOWED';
   static const String SUBMIT = 'SUBMIT';
-  static const String ERROR_SUBMIT = 'FAILED TO SUBMIT NEW QUIZ';
+  static const String ERROR_SUBMIT = 'ERROR TO SUBMIT NEW QUIZ';
 }
