@@ -13,8 +13,18 @@ class APIService {
 
   /// Send a GET request on the given entry point
   Future<dynamic> get(String entryPoint) async {
-    final response = await http.get(Uri.parse(_url + entryPoint));
+    return extractData(await http.get(Uri.parse(_url + entryPoint)));
+  }
 
+  /// Send a POST request on the given entry point with the payload
+  Future<dynamic> post(String entryPoint, Object? payload) async {
+    return extractData(await http.post(Uri.parse(_url + entryPoint),
+        body: jsonEncode(payload),
+        headers: {'Content-Type': 'application/json'}));
+  }
+
+  /// Extract data from the given HTTP response
+  dynamic extractData(http.Response response) {
     // Decode body
     var body = jsonDecode(response.body);
 

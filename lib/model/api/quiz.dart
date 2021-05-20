@@ -63,3 +63,75 @@ class StringMultipleChoiceQuestion extends AQuizQuestion {
             .toList());
   }
 }
+
+// Quiz results in solo mode
+class SoloQuizResults {
+  static const String SCORE_FIELD_NAME = 'score';
+  static const String MAX_SCORE_FIELD_NAME = 'maxScore';
+  static const String FAILS_FIELD_NAME = 'fails';
+
+  final int score;
+  final int maxScore;
+  final List<AQuestionFail> fails;
+
+  /// Constructor
+  SoloQuizResults(int score, int maxScore, List<AQuestionFail> fails)
+      : score = score,
+        maxScore = maxScore,
+        fails = fails.toList();
+
+  /// Load a SoloQuizResults from a JSON
+  factory SoloQuizResults.fromJSON(Map<String, dynamic> json) {
+    if (!json.containsKey(SCORE_FIELD_NAME) ||
+        !json.containsKey(MAX_SCORE_FIELD_NAME) ||
+        !json.containsKey(FAILS_FIELD_NAME) ||
+        !(json[SCORE_FIELD_NAME] is int) ||
+        !(json[MAX_SCORE_FIELD_NAME] is int) ||
+        !(json[FAILS_FIELD_NAME] is List<dynamic>)) {
+      throw Exception('Malformed SoloQuizResults');
+    }
+
+    return SoloQuizResults(
+        json[SCORE_FIELD_NAME],
+        json[MAX_SCORE_FIELD_NAME],
+        (json[FAILS_FIELD_NAME] as List<dynamic>)
+            .map((e) => AQuestionFail.fromJSON(e))
+            .toList());
+  }
+}
+
+/// Abstract class for a question fail
+abstract class AQuestionFail {
+  /// Load a AQuestionFail from a JSON
+  static AQuestionFail fromJSON(Map<String, dynamic> json) {
+    return StringMultipleChoiceQuestionFail.fromJSON(json);
+  }
+}
+
+/// Question fail for a StringMultipleChoiceQuestion
+class StringMultipleChoiceQuestionFail extends AQuestionFail {
+  static const String USER_ANSWER_FIELD_NAME = 'userAnswer';
+  static const String SOLUTION_FIELD_NAME = 'solution';
+
+  final String? userAnswer;
+  final String solution;
+
+  /// Constructor
+  StringMultipleChoiceQuestionFail(String? userAnswer, String solution)
+      : userAnswer = userAnswer,
+        solution = solution;
+
+  /// Load a StringMultipleChoiceQuestionFail from JSON
+  factory StringMultipleChoiceQuestionFail.fromJSON(Map<String, dynamic> json) {
+    if (!json.containsKey(USER_ANSWER_FIELD_NAME) ||
+        !json.containsKey(SOLUTION_FIELD_NAME) ||
+        (json[USER_ANSWER_FIELD_NAME] != null &&
+            !(json[USER_ANSWER_FIELD_NAME] is String)) ||
+        !(json[SOLUTION_FIELD_NAME] is String)) {
+      throw Exception('Malformed StringMultipleChoiceQuestionFail');
+    }
+
+    return StringMultipleChoiceQuestionFail(
+        json[USER_ANSWER_FIELD_NAME], json[SOLUTION_FIELD_NAME]);
+  }
+}
