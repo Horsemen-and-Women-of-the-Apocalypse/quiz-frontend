@@ -113,11 +113,11 @@ class StringMultipleChoiceQuestionFail extends AQuestionFail {
   static const String USER_ANSWER_FIELD_NAME = 'userAnswer';
   static const String SOLUTION_FIELD_NAME = 'solution';
 
-  final String userAnswer;
+  final String? userAnswer;
   final String solution;
 
   /// Constructor
-  StringMultipleChoiceQuestionFail(String userAnswer, String solution)
+  StringMultipleChoiceQuestionFail(String? userAnswer, String solution)
       : userAnswer = userAnswer,
         solution = solution;
 
@@ -125,7 +125,8 @@ class StringMultipleChoiceQuestionFail extends AQuestionFail {
   factory StringMultipleChoiceQuestionFail.fromJSON(Map<String, dynamic> json) {
     if (!json.containsKey(USER_ANSWER_FIELD_NAME) ||
         !json.containsKey(SOLUTION_FIELD_NAME) ||
-        !(json[USER_ANSWER_FIELD_NAME] is String) ||
+        (json[USER_ANSWER_FIELD_NAME] != null &&
+            !(json[USER_ANSWER_FIELD_NAME] is String)) ||
         !(json[SOLUTION_FIELD_NAME] is String)) {
       throw Exception('Malformed StringMultipleChoiceQuestionFail');
     }

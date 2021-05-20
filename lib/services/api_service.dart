@@ -19,7 +19,8 @@ class APIService {
   /// Send a POST request on the given entry point with the payload
   Future<dynamic> post(String entryPoint, Object? payload) async {
     return extractData(await http.post(Uri.parse(_url + entryPoint),
-        body: jsonEncode(payload)));
+        body: jsonEncode(payload),
+        headers: {'Content-Type': 'application/json'}));
   }
 
   /// Extract data from the given HTTP response

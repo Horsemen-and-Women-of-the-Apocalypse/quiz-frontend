@@ -117,6 +117,12 @@ void main() {
           reason: 'Invalid user\'s answer');
       expect(
           StringMultipleChoiceQuestionFail.fromJSON({
+            StringMultipleChoiceQuestionFail.USER_ANSWER_FIELD_NAME: null,
+            StringMultipleChoiceQuestionFail.SOLUTION_FIELD_NAME: 'solution'
+          }),
+          isNotNull);
+      expect(
+          StringMultipleChoiceQuestionFail.fromJSON({
             StringMultipleChoiceQuestionFail.USER_ANSWER_FIELD_NAME: 'answer',
             StringMultipleChoiceQuestionFail.SOLUTION_FIELD_NAME: 'solution'
           }),

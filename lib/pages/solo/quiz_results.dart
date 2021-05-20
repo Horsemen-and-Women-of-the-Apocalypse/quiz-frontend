@@ -24,15 +24,17 @@ class SoloQuizResultsPage extends StatelessWidget {
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    generateTextCard(context, 'User', Colors.blue),
-                    generateTextCard(context, 'Solution', Colors.blue)
-                  ],
-                )
-              ] +
+          children: (_results.fails.isEmpty
+                  ? <Widget>[]
+                  : <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          generateTextCard(context, 'User', Colors.blue),
+                          generateTextCard(context, 'Solution', Colors.blue)
+                        ],
+                      )
+                    ]) +
               _results.fails
                   .map((e) => generateCorrection(context, e))
                   .toList(),
@@ -59,7 +61,8 @@ class SoloQuizResultsPage extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          generateTextCard(context, fail.userAnswer, Colors.red),
+          generateTextCard(context,
+              fail.userAnswer == null ? '' : fail.userAnswer!, Colors.red),
           generateTextCard(context, fail.solution, Colors.green)
         ],
       );
