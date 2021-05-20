@@ -7,7 +7,6 @@ import 'package:quiz/utils/page_texts.dart';
 import 'package:quiz/widgets/quiz_dropdown_button.dart';
 
 class LobbyCreateDialog extends StatelessWidget {
-
   final _formKey = GlobalKey<FormState>();
   final LobbyService _service = LobbyService();
   final BuildContext context;
@@ -58,9 +57,7 @@ class LobbyCreateDialog extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(Icons.question_answer),
-                    Padding(
-                        padding: EdgeInsets.only(left: 15),
-                        child: dropdown)
+                    Padding(padding: EdgeInsets.only(left: 15), child: dropdown)
                   ],
                 ),
               ),
@@ -73,7 +70,7 @@ class LobbyCreateDialog extends StatelessWidget {
                   return null;
                 },
                 decoration: InputDecoration(
-                  labelText: LobbyPageTexts.LOBBY_OWNER_ID,
+                  labelText: LobbyPageTexts.LOBBY_OWNER_NAME,
                   icon: Icon(Icons.account_circle_rounded),
                 ),
               ),
@@ -90,7 +87,7 @@ class LobbyCreateDialog extends StatelessWidget {
                 // TODO: Switch to lobby
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(LobbyPageTexts.ERROR_SUBMIT,
+                    content: Text(LobbyPageTexts.ERROR_SUBMIT_CREATE,
                         style: TextStyle(color: Colors.red))));
               }
             }

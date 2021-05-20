@@ -2,7 +2,6 @@ import 'package:quiz/model/api/quiz.dart';
 
 ///Class to represent a lobby
 class Lobby {
-
   String name = '';
   QuizListItem? quiz;
   String ownerName = '';

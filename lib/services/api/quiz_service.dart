@@ -21,6 +21,7 @@ class QuizService extends APIService {
         .map((e) => AQuizQuestion.fromJSON(e))
         .toList();
   }
+
   /// Create the given quiz, returning its id
   Future<String> create(Quiz quiz) async {
     return await post('quiz/create', quiz) as String;
