@@ -87,12 +87,12 @@ class LobbyCreateDialog extends StatelessWidget {
               try {
                 var lobby =
                     Lobby(ownerNameController.text, nameController.text, quiz);
-                lobby = await _service.create(lobby);
+                var lobbyOwner = await _service.create(lobby);
                 await Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => LobbyStartPage(
-                            lobby.getId(), lobby.getOwnerId(), true)));
+                        builder: (context) => LobbyStartPage(lobbyOwner.getId(),
+                            lobbyOwner.getOwnerId(), true)));
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(LobbyPageTexts.ERROR_SUBMIT_CREATE,

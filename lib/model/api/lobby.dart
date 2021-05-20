@@ -10,7 +10,7 @@ class LobbyInfo {
   final String name;
   final String quizName;
   final String ownerName;
-  List<dynamic> playerNames;
+  List<String> playerNames;
 
   /// Constructor
   LobbyInfo._(
@@ -32,6 +32,6 @@ class LobbyInfo {
     }
 
     return LobbyInfo._(json[ID], json[NAME], json[QUIZNAME], json[OWNERNAME],
-        (json[PLAYERNAMES] as List<String>).map((e) => e).toList());
+        (json[PLAYERNAMES] as List<dynamic>).map((e) => e as String).toList());
   }
 }

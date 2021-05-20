@@ -10,4 +10,5 @@ class LobbyPageTexts {
   static const String ERROR_BACK = 'BACK TO HOME';
   static const String START_GAME = 'START';
   static const String LEAVE_LOBBY = 'LEAVE LOBBY';
+  static const String ERROR_GET_LOBBY = 'UNABLE TO GET LOBBY';
 }

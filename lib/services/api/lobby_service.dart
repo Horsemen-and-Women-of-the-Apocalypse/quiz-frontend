@@ -9,13 +9,12 @@ class LobbyService extends APIService {
   }
 
   Future<Lobby> create(Lobby lobby) async {
-    return (await post('lobby/create', lobby) as dynamic)
-        .map((e) => Lobby.fromJSON(e));
+    return Lobby.fromJSON((await post('lobby/create', lobby) as dynamic));
   }
 
   /// Get LobbyInfo based on its id
   Future<LobbyInfo> findById(String lobbyId, String playerId) async {
-    return (await get('/lobby/$lobbyId/info') as dynamic)
-        .map((e) => LobbyInfo.fromJSON(e));
+    return LobbyInfo.fromJSON(
+        (await post('lobby/$lobbyId/info', {'playerId': playerId}) as dynamic));
   }
 }
