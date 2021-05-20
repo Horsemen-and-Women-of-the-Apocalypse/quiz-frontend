@@ -22,8 +22,9 @@ class LobbyStartPage extends StatefulWidget {
 class _LobbyStartPageState extends State<LobbyStartPage> {
   final LobbyService _service = LobbyService();
   Future<LobbyInfo>? lobbyInfo;
+  io.Socket? socket;
 
-  void initSocketClient() {
+   io.Socket initSocketClient() {
     var socket = io.io(
         'http://localhost:3000',
         io.OptionBuilder().setPath('/ws').setQuery({
@@ -37,13 +38,20 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
       (lobbyInfo as LobbyInfo).playerNames.add(data);
     });
     socket.onDisconnect((_) => socket.emit('disconnect'));
+    return socket;
   }
 
   @override
   void initState() {
     lobbyInfo = _service.findById(widget._lobbyId, widget._playerId);
-    initSocketClient();
+    socket = initSocketClient();
     super.initState();
+  }
+
+  @override
+  void dispose(){
+    socket?.close();
+    super.dispose();
   }
 
   @override
@@ -71,6 +79,16 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
                           return Text(
                               (snapshot.data as LobbyInfo).playerNames[index]);
                         })),
+                ElevatedButton(
+                  onPressed: () {
+                    socket?.close();
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                            (r) => false);
+                  },
+                  child: Text(LobbyPageTexts.LEAVE_LOBBY),
+                ),
                 if (widget.owner)
                   ElevatedButton(
                     onPressed: () => null, //TODO

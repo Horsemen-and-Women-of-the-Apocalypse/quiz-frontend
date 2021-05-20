@@ -9,4 +9,5 @@ class LobbyPageTexts {
   static const String ERROR_ID_EMPTY = 'PLEASE PUT A LOBBY ID';
   static const String ERROR_BACK = 'BACK TO HOME';
   static const String START_GAME = 'START';
+  static const String LEAVE_LOBBY = 'LEAVE LOBBY';
 }
