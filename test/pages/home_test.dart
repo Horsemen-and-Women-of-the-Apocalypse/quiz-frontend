@@ -14,7 +14,7 @@ void main() {
             .widget<ElevatedButton>(
                 find.byKey(Key(HomepageTexts.SOLO_BUTTON_TEXT)))
             .enabled,
-        isFalse);
+        isTrue);
     expect(
         tester
             .widget<ElevatedButton>(
@@ -25,6 +25,12 @@ void main() {
         tester
             .widget<ElevatedButton>(
                 find.byKey(Key(HomepageTexts.LOBBY_JOINING_BUTTON_TEXT)))
+            .enabled,
+        isTrue);
+    expect(
+        tester
+            .widget<ElevatedButton>(
+                find.byKey(Key(HomepageTexts.CREATE_QUIZ_BUTTON_TEXT)))
             .enabled,
         isTrue);
   });

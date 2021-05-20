@@ -5,7 +5,6 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
 
 /// Service interacting with API
-/// Service interacting with API
 class APIService {
   final String _url;
 
