@@ -14,7 +14,7 @@ void main() {
             .widget<ElevatedButton>(
                 find.byKey(Key(HomepageTexts.SOLO_BUTTON_TEXT)))
             .enabled,
-        isTrue);
+        isFalse);
     expect(
         tester
             .widget<ElevatedButton>(
