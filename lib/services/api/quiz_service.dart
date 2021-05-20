@@ -1,6 +1,7 @@
 import 'package:quiz/model/api/quiz.dart';
 import 'package:quiz/model/creation/creation.dart';
 import 'package:quiz/services/api_service.dart';
+import 'package:quiz/widgets/quiz_form.dart';
 
 /// Service for quiz API
 class QuizService extends APIService {
@@ -11,13 +12,9 @@ class QuizService extends APIService {
         .toList();
   }
 
-  Future<List<AQuizQuestion>?> findById(String id) async {
-    var data = await get('quiz/$id/questions');
-    if (data == null) {
-      return data;
-    }
-
-    return (data as List<dynamic>)
+  /// Get quiz based on its id
+  Future<List<AQuizQuestion>> findById(String id) async {
+    return (await get('quiz/$id/questions') as List<dynamic>)
         .map((e) => AQuizQuestion.fromJSON(e))
         .toList();
   }
@@ -25,5 +22,10 @@ class QuizService extends APIService {
   /// Create the given quiz, returning its id
   Future<String> create(Quiz quiz) async {
     return await post('quiz/create', quiz) as String;
+  }
+  
+  /// Answer the given quiz
+  Future<SoloQuizResults> answer(String quizId, QuizFormData answers) async {
+    return SoloQuizResults.fromJSON(await post('quiz/$quizId/answer', answers));
   }
 }
