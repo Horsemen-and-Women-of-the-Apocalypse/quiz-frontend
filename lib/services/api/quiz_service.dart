@@ -15,7 +15,8 @@ class QuizService extends APIService {
   /// Create the given quiz, returning its id
   Future<String> create(Quiz quiz) async {
     return await post('quiz/create', quiz) as String;
-  
+  }
+
   /// Get quiz based on its id
   Future<List<AQuizQuestion>> findById(String id) async {
     return (await get('quiz/$id/questions') as List<dynamic>)
