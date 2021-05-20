@@ -27,5 +27,11 @@ void main() {
                 find.byKey(Key(HomepageTexts.LOBBY_JOINING_BUTTON_TEXT)))
             .enabled,
         isFalse);
+    expect(
+        tester
+            .widget<ElevatedButton>(
+                find.byKey(Key(HomepageTexts.CREATE_QUIZ_BUTTON_TEXT)))
+            .enabled,
+        isTrue);
   });
 }

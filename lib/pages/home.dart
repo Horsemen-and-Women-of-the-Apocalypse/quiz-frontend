@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz/pages/quiz_creation.dart';
 import 'package:quiz/pages/solo/quiz_selection.dart';
 import 'package:quiz/utils/page_texts.dart';
 
@@ -42,7 +43,19 @@ class HomePage extends StatelessWidget {
                 key: Key(HomepageTexts.LOBBY_JOINING_BUTTON_TEXT),
                 onPressed: null, // TODO: Switch to lobby joining page
                 style: buttonStyle,
-                child: Text(HomepageTexts.LOBBY_JOINING_BUTTON_TEXT)))
+                child: Text(HomepageTexts.LOBBY_JOINING_BUTTON_TEXT))),
+            buttonPaddingGenerator(ElevatedButton(
+                key: Key(HomepageTexts.CREATE_QUIZ_BUTTON_TEXT),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QuizCreationPage(),
+                    ),
+                  );
+                },
+                style: buttonStyle,
+                child: Text(HomepageTexts.CREATE_QUIZ_BUTTON_TEXT)))
           ],
         ),
       ),
