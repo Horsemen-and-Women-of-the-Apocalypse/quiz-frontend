@@ -15,7 +15,7 @@ class APIService {
   Future<dynamic> get(String entryPoint) async {
     return extractData(await http.get(Uri.parse(_url + entryPoint)));
   }
-  
+
   /// Send a POST request on the given entry point with the payload
   Future<dynamic> post(String entryPoint, Object? payload) async {
     return extractData(await http.post(Uri.parse(_url + entryPoint),
