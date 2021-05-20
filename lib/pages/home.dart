@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quiz/pages/solo/quiz_selection.dart';
-import 'package:quiz/utils/page_texts.dart';
+import 'package:quiz/pages/quiz_creation.dart';
 import 'package:quiz/utils/lobby_texts.dart';
+import 'package:quiz/utils/page_texts.dart';
 import 'package:quiz/widgets/lobby_join_dialog.dart';
 
 /// Home page widget
@@ -29,10 +29,7 @@ class HomePage extends StatelessWidget {
                 )),
             buttonPaddingGenerator(ElevatedButton(
                 key: Key(HomepageTexts.SOLO_BUTTON_TEXT),
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => QuizSelectionPage())),
+                onPressed: null, // TODO: Switch to solo mode page
                 style: buttonStyle,
                 child: Text(HomepageTexts.SOLO_BUTTON_TEXT))),
             buttonPaddingGenerator(ElevatedButton(
@@ -56,7 +53,19 @@ class HomePage extends StatelessWidget {
                   }
                 },
                 style: buttonStyle,
-                child: Text(HomepageTexts.LOBBY_JOINING_BUTTON_TEXT)))
+                child: Text(HomepageTexts.LOBBY_JOINING_BUTTON_TEXT))),
+            buttonPaddingGenerator(ElevatedButton(
+                key: Key(HomepageTexts.CREATE_QUIZ_BUTTON_TEXT),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QuizCreationPage(),
+                    ),
+                  );
+                },
+                style: buttonStyle,
+                child: Text(HomepageTexts.CREATE_QUIZ_BUTTON_TEXT)))
           ],
         ),
       ),
