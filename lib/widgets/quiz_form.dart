@@ -25,6 +25,11 @@ class QuizFormData {
   /// Constructor
   QuizFormData(List<AQuizQuestion> questions)
       : answers = List.generate(questions.length, (index) => null);
+
+  /// Convert object into a JSON
+  Map<String, dynamic> toJson() {
+    return {'answers': answers};
+  }
 }
 
 class _QuizFormState extends State<QuizForm> {

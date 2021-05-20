@@ -44,10 +44,10 @@ void main() {
           () => StringMultipleChoiceQuestion.fromJSON(
               {StringMultipleChoiceQuestion.QUESTION_FIELD_NAME: 'Question'}),
           throwsException,
-          reason: 'Answers are missing');
+          reason: 'Choices are missing');
       expect(
           () => StringMultipleChoiceQuestion.fromJSON({
-                StringMultipleChoiceQuestion.ANSWERS_FIELD_NAME:
+                StringMultipleChoiceQuestion.CHOICES_FIELD_NAME:
                     List<String>.empty()
               }),
           throwsException,
@@ -55,7 +55,7 @@ void main() {
       expect(
           () => StringMultipleChoiceQuestion.fromJSON({
                 StringMultipleChoiceQuestion.QUESTION_FIELD_NAME: 0,
-                StringMultipleChoiceQuestion.ANSWERS_FIELD_NAME:
+                StringMultipleChoiceQuestion.CHOICES_FIELD_NAME:
                     List.of(['A', 'B'])
               }),
           throwsException,
@@ -63,14 +63,21 @@ void main() {
       expect(
           () => StringMultipleChoiceQuestion.fromJSON({
                 StringMultipleChoiceQuestion.QUESTION_FIELD_NAME: 'Question',
-                StringMultipleChoiceQuestion.ANSWERS_FIELD_NAME: 'Answers'
+                StringMultipleChoiceQuestion.CHOICES_FIELD_NAME: 'Answers'
               }),
           throwsException,
-          reason: 'Invalid answers');
+          reason: 'Invalid choices');
+      expect(
+          () => StringMultipleChoiceQuestion.fromJSON({
+                StringMultipleChoiceQuestion.QUESTION_FIELD_NAME: 'Question',
+                StringMultipleChoiceQuestion.CHOICES_FIELD_NAME: [0, 1].toList()
+              }),
+          throwsException,
+          reason: 'Invalid choices');
       expect(
           StringMultipleChoiceQuestion.fromJSON({
             StringMultipleChoiceQuestion.QUESTION_FIELD_NAME: 'Question',
-            StringMultipleChoiceQuestion.ANSWERS_FIELD_NAME: List.of(['A', 'B'])
+            StringMultipleChoiceQuestion.CHOICES_FIELD_NAME: List.of(['A', 'B'])
           }),
           isNotNull);
     });
