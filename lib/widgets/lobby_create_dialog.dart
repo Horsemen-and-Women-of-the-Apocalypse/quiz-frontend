@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz/model/creation/creation_lobby.dart';
+import 'package:quiz/pages/lobby_start_room.dart';
 import 'package:quiz/services/api/lobby_service.dart';
 import 'package:quiz/utils/lobby_texts.dart';
 import 'package:quiz/utils/page_texts.dart';
@@ -13,7 +14,6 @@ class LobbyCreateDialog extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController ownerNameController = TextEditingController();
 
-  final Lobby lobby = Lobby();
   final dropdown = QuizDropdownButton();
 
   LobbyCreateDialog(this.context);
@@ -82,16 +82,17 @@ class LobbyCreateDialog extends StatelessWidget {
         ElevatedButton(
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
+              var quiz = dropdown.quiz();
+              if (quiz == null) throw Error();
               try {
-                lobby.ownerName = ownerNameController.text;
-                lobby.name = nameController.text;
-                lobby.quiz = dropdown.quiz();
-                await _service.create(lobby);
-                //TODO
-                /* await Navigator.push(
+                var lobby =
+                    Lobby(ownerNameController.text, nameController.text, quiz);
+                lobby = await _service.create(lobby);
+                await Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => LobbyStartPage(lobbyIdController.text, playerId, true)));*/
+                        builder: (context) => LobbyStartPage(
+                            lobby.getId(), lobby.getOwnerId(), true)));
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(LobbyPageTexts.ERROR_SUBMIT_CREATE,
