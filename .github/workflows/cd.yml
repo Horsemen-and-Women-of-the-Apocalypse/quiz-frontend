@@ -1,0 +1,86 @@
+name: Master branch Continuous Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  docker-img-name: quiz_app_img
+  api_url: "{\\\"API_URL\\\": \\\"http://164.132.98.183:8906/\\\"}"
+jobs:
+  build-web:
+    name: Build web and attach docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get project
+        uses: actions/checkout@v1
+
+      - name: Create file
+        run: echo ${{env.api_url}} > ./assets/cfg/app_settings.json
+
+      - name: Get application version
+        id: package-version
+        uses: CumulusDS/get-yaml-paths-action@v0.1.0
+        with:
+          file: pubspec.yaml
+          version: version
+
+      - name: Build the Docker image
+        run: docker build . -t ${{env.docker-img-name}}
+
+      - name: Save the Docker image
+        run: docker save --output ${{env.docker-img-name}}.tar ${{env.docker-img-name}}
+
+      - name: Upload Docker image to release
+        uses: svenstaro/upload-release-action@v1-release
+        with:
+          repo_token: ${{secrets.GITHUB_TOKEN}}
+          file: ${{env.docker-img-name}}.tar
+          asset_name: ${{env.docker-img-name}}.tar
+          tag: ${{steps.package-version.outputs.version}}
+          overwrite: true
+
+  build-android:
+    name: Build android and attach apk
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get project
+        uses: actions/checkout@v1
+
+      - name: Create file
+        run: echo ${{env.api_url}} > ./assets/cfg/app_settings.json
+
+      - name: Get application version
+        id: package-version
+        uses: CumulusDS/get-yaml-paths-action@v0.1.0
+        with:
+          file: pubspec.yaml
+          version: version
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "2.0.6"
+
+      - name: Pub Get Packages
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Build APPBUNDLE
+        run: flutter build appbundle --release
+
+      - name: Create Github Release
+        uses: svenstaro/upload-release-action@v1-release
+        with:
+          repo_token: ${{secrets.GITHUB_TOKEN}}
+          file: ./build/app/outputs/flutter-apk/app-release.apk
+          asset_name: app-release.apk
+          tag: ${{steps.package-version.outputs.version}}
+          overwrite: true
