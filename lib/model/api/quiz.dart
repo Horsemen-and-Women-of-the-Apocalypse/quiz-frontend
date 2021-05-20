@@ -35,7 +35,7 @@ abstract class AQuizQuestion {
 /// Question with multiple choices defined by a string
 class StringMultipleChoiceQuestion extends AQuizQuestion {
   static const String QUESTION_FIELD_NAME = 'question';
-  static const String ANSWERS_FIELD_NAME = 'answers';
+  static const String CHOICES_FIELD_NAME = 'choices';
 
   final List<String> answers;
   final String question;
@@ -48,14 +48,19 @@ class StringMultipleChoiceQuestion extends AQuizQuestion {
   /// Load a StringMultipleChoiceQuestion from a JSON
   factory StringMultipleChoiceQuestion.fromJSON(Map<String, dynamic> json) {
     if (!json.containsKey(QUESTION_FIELD_NAME) ||
-        !json.containsKey(ANSWERS_FIELD_NAME) ||
+        !json.containsKey(CHOICES_FIELD_NAME) ||
         !(json[QUESTION_FIELD_NAME] is String) ||
-        !(json[ANSWERS_FIELD_NAME] is List<String>)) {
+        !(json[CHOICES_FIELD_NAME] is List<dynamic>) ||
+        (json[CHOICES_FIELD_NAME] as List<dynamic>)
+            .any((element) => !(element is String))) {
       throw Exception('Malformed StringMultipleChoiceQuestion');
     }
 
     return StringMultipleChoiceQuestion(
-        json[QUESTION_FIELD_NAME], json[ANSWERS_FIELD_NAME]);
+        json[QUESTION_FIELD_NAME],
+        (json[CHOICES_FIELD_NAME] as List<dynamic>)
+            .map((e) => e as String)
+            .toList());
   }
 }
 

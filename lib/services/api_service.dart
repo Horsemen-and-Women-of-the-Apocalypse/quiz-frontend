@@ -24,16 +24,13 @@ class APIService {
 
   /// Extract data from the given HTTP response
   dynamic extractData(http.Response response) {
-    if (response.headers['Content-Type'] == null ||
-        !response.headers['Content-Type']!.contains('application/json')) {
-      throw Exception('API response isn\'t a JSON object');
-    }
+    // Decode body
     var body = jsonDecode(response.body);
 
     // Check status code
     if (response.statusCode != 200) {
-      throw Exception(body.error);
+      throw Exception(body['error']);
     }
-    return body.data;
+    return body['data'];
   }
 }
