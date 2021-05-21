@@ -14,5 +14,5 @@ class LobbyPageTexts {
   static const String PLAYERS = 'PLAYERS :';
   static const String ERROR_START = 'CANNOT LAUNCH THE GAME';
   static const String RESULTS = 'RESULTS';
-  static const String ERROR_GET_RESULTS = 'RESULTS';
+  static const String ERROR_GET_RESULTS = 'CANNOT GET RESULTS';
 }
