@@ -4,6 +4,7 @@ import 'package:quiz/model/api/lobby.dart';
 import 'package:quiz/model/creation/creation.dart';
 import 'package:quiz/pages/home.dart';
 import 'package:quiz/pages/multi/lobby_quiz.dart';
+import 'package:quiz/pages/multi/quiz_results_multi.dart';
 import 'package:quiz/services/api/lobby_service.dart';
 import 'package:quiz/utils/lobby_texts.dart';
 import 'package:quiz/utils/quiz_text.dart';
@@ -49,7 +50,10 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
                   lobbyInfo!.quizName, widget._lobbyId, widget._playerId)));
     });
     socket.on('lobby-end', (data) {
-      // TODO: Go to results page
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MultiQuizResultsPage(widget._lobbyId)));
     });
 
     return socket;
@@ -211,7 +215,7 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
                           context,
                           MaterialPageRoute(builder: (context) => HomePage()),
                           (r) => false),
-                      child: Text(LobbyPageTexts.ERROR_BACK))
+                      child: Text(LobbyPageTexts.LOBBY_BACK_TO_HOME))
                 ],
               ),
             );
