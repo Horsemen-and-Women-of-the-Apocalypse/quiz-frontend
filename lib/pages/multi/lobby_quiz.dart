@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/model/api/quiz.dart';
+import 'package:quiz/pages/multi/lobby_wait_room.dart';
 import 'package:quiz/services/api/lobby_service.dart';
 import 'package:quiz/widgets/quiz_form.dart';
 
@@ -83,7 +84,9 @@ class _LobbyQuizPageState extends State<LobbyQuizPage> {
       // Send answers
       await _service.answer(_lobbyId, _playerId, form);
 
-      // TODO: Go to waiting end room
+      // Go to waiting room
+      await Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LobbyEndRoomPage()));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Failed to send answers',
