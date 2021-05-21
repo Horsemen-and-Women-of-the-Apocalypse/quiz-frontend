@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:quiz/model/api/lobby.dart';
 import 'package:quiz/model/creation/creation.dart';
 import 'package:quiz/pages/home.dart';
+import 'package:quiz/pages/multi/lobby_quiz.dart';
 import 'package:quiz/services/api/lobby_service.dart';
 import 'package:quiz/utils/lobby_texts.dart';
 import 'package:quiz/utils/quiz_text.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'package:flutter/services.dart';
 
 ///Widget for [Quiz] creation
 class LobbyStartPage extends StatefulWidget {
@@ -40,6 +41,17 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
         lobbyInfo!.playerNames.add(data);
       });
     });
+    socket.on('lobby-start', (data) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => LobbyQuizPage(
+                  lobbyInfo!.quizName, widget._lobbyId, widget._playerId)));
+    });
+    socket.on('lobby-end', (data) {
+      // TODO: Go to results page
+    });
+
     return socket;
   }
 
@@ -169,7 +181,6 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
                         try {
                           await _service.start(
                               widget._lobbyId, widget._playerId);
-                          //TODO ROUTAGE
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(LobbyPageTexts.ERROR_START,
