@@ -215,7 +215,7 @@ class _LobbyStartPageState extends State<LobbyStartPage> {
                           context,
                           MaterialPageRoute(builder: (context) => HomePage()),
                           (r) => false),
-                      child: Text(LobbyPageTexts.ERROR_BACK))
+                      child: Text(LobbyPageTexts.LOBBY_BACK_TO_HOME))
                 ],
               ),
             );

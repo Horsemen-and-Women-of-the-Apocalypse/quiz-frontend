@@ -1,5 +1,6 @@
 import 'package:quiz/model/api/lobby.dart';
 import 'package:quiz/model/api/quiz.dart';
+import 'package:quiz/model/api/result.dart';
 import 'package:quiz/model/creation/creation_lobby.dart';
 import 'package:quiz/services/api_service.dart';
 import 'package:quiz/widgets/quiz_form.dart';
@@ -15,8 +16,9 @@ class LobbyService extends APIService {
     return Lobby.fromJSON((await post('lobby/create', lobby) as dynamic));
   }
 
-  Future<Lobby> results(String lobbyId) async {
-    return Lobby.fromJSON((await get('lobby/$lobbyId/results') as dynamic));
+  Future<LobbyResults> results(String lobbyId) async {
+    return LobbyResults.fromJSON(
+        (await get('lobby/$lobbyId/results') as dynamic));
   }
 
   Future<String> start(String lobbyId, String playerId) async {

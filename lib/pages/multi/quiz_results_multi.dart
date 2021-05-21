@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quiz/model/api/lobby.dart';
 import 'package:quiz/model/api/result.dart';
 import 'package:quiz/pages/home.dart';
 import 'package:quiz/services/api/lobby_service.dart';
@@ -23,124 +22,45 @@ class _MultiQuizResultsPageState extends State<MultiQuizResultsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(LobbyPageTexts.RESULTS,
               style: Theme.of(context).textTheme.headline3),
-          FutureBuilder(
+          FutureBuilder<LobbyResults>(
               future: _service.results(widget._lobbyId),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
-                    children: [
-                      Text(LobbyPageTexts.RESULTS),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.all(15),
-                          child: ListView.builder(
-                              itemCount: (snapshot.data as LobbyResults)
-                                  .scoreByPlayerName
-                                  .length,
-                              itemBuilder: (context, index) {
-                                switch (index) {
-                                  case 0:
-                                    return Row(
-                                      children: [
-                                        Icon(Icons.looks_one_outlined),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15),
-                                          child: Text(
-                                              (snapshot.data as LobbyInfo)
-                                                  .playerNames[index]),
-                                        ),
-                                      ],
-                                    );
-                                  case 1:
-                                    return Row(
-                                      children: [
-                                        Icon(Icons.looks_two_outlined),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15),
-                                          child: Text(
-                                              (snapshot.data as LobbyInfo)
-                                                  .playerNames[index]),
-                                        ),
-                                      ],
-                                    );
-                                  case 2:
-                                    return Row(
-                                      children: [
-                                        Icon(Icons.looks_3_outlined),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15),
-                                          child: Text(
-                                              (snapshot.data as LobbyInfo)
-                                                  .playerNames[index]),
-                                        ),
-                                      ],
-                                    );
-                                  default:
-                                    return Row(
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15),
-                                          child: Text(
-                                              (snapshot.data as LobbyInfo)
-                                                  .playerNames[index]),
-                                        ),
-                                      ],
-                                    );
-                                }
-                              }),
-                        ),
-                      ),
-                      ElevatedButton(
-                          onPressed: () => Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()),
-                              (r) => false),
-                          child: Text(LobbyPageTexts.ERROR_BACK))
-                    ],
-                  );
-                }
-                if (snapshot.hasError) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
-                          child: Text(LobbyPageTexts.ERROR_GET_RESULTS,
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                        ElevatedButton(
-                            onPressed: () => Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()),
-                                (r) => false),
-                            child: Text(LobbyPageTexts.ERROR_BACK))
-                      ],
-                    ),
-                  );
+                      children: Iterable.generate(
+                          snapshot.data!.scoreByPlayerName.length, (index) {
+                        return Card(
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 25),
+                              child: Text(
+                                '${index + 1}. ${snapshot.data!.scoreByPlayerName[index].name}',
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList());
                 }
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(child: CircularProgressIndicator()),
-                  ],
-                );
-              })
+
+                if (snapshot.hasError) {
+                  return Text('Failed to get results',
+                      style: TextStyle(color: Colors.red));
+                }
+
+                return Center(child: CircularProgressIndicator());
+              }),
+          ElevatedButton(
+              onPressed: () => Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                  (r) => false),
+              child: Text(LobbyPageTexts.LOBBY_BACK_TO_HOME))
         ],
       ),
     );
