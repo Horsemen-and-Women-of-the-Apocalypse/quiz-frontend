@@ -1,6 +1,8 @@
 import 'package:quiz/model/api/lobby.dart';
+import 'package:quiz/model/api/quiz.dart';
 import 'package:quiz/model/creation/creation_lobby.dart';
 import 'package:quiz/services/api_service.dart';
+import 'package:quiz/widgets/quiz_form.dart';
 
 /// Service for lobby API
 class LobbyService extends APIService {
@@ -26,5 +28,19 @@ class LobbyService extends APIService {
   Future<LobbyInfo> findById(String lobbyId, String playerId) async {
     return LobbyInfo.fromJSON(
         (await post('lobby/$lobbyId/info', {'playerId': playerId}) as dynamic));
+  }
+
+  /// Get questions
+  Future<List<AQuizQuestion>> questions(String lobbyId, String playerId) async {
+    return (await post('lobby/$lobbyId/questions', {'playerId': playerId})
+            as List<dynamic>)
+        .map((e) => AQuizQuestion.fromJSON(e))
+        .toList();
+  }
+
+  /// Send answers
+  Future<void> answer(
+      String lobbyId, String playerId, QuizFormData form) async {
+    return await post('lobby/$lobbyId/player/$playerId/answer', form);
   }
 }
